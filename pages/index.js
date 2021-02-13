@@ -1,65 +1,47 @@
-import Head from 'next/head'
-import styles from '../styles/Home.module.css'
+import Link from "next/link";
+import { useRouter } from "next/router";
+import baseUrl from "../helpers/baseUrl";
 
-export default function Home() {
-  return (
-    <div className={styles.container}>
-      <Head>
-        <title>Create Next App</title>
-        <link rel="icon" href="/favicon.ico" />
-      </Head>
-
-      <main className={styles.main}>
-        <h1 className={styles.title}>
-          Welcome to <a href="https://nextjs.org">Next.js!</a>
-        </h1>
-
-        <p className={styles.description}>
-          Get started by editing{' '}
-          <code className={styles.code}>pages/index.js</code>
-        </p>
-
-        <div className={styles.grid}>
-          <a href="https://nextjs.org/docs" className={styles.card}>
-            <h3>Documentation &rarr;</h3>
-            <p>Find in-depth information about Next.js features and API.</p>
-          </a>
-
-          <a href="https://nextjs.org/learn" className={styles.card}>
-            <h3>Learn &rarr;</h3>
-            <p>Learn about Next.js in an interactive course with quizzes!</p>
-          </a>
-
-          <a
-            href="https://github.com/vercel/next.js/tree/master/examples"
-            className={styles.card}
-          >
-            <h3>Examples &rarr;</h3>
-            <p>Discover and deploy boilerplate example Next.js projects.</p>
-          </a>
-
-          <a
-            href="https://vercel.com/new?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-            className={styles.card}
-          >
-            <h3>Deploy &rarr;</h3>
-            <p>
-              Instantly deploy your Next.js site to a public URL with Vercel.
-            </p>
-          </a>
+export default function Home({ products }) {
+  const router = useRouter();
+  if (router.isFallback) {
+    return <h3>Loading</h3>;
+  }
+  const productList = products.map((product) => {
+    return (
+      <div className="card pcard" key={product._id}>
+        <div className="card-image">
+          <img src={product.mediaUrl} />
+          <span className="card-title">{product.name}</span>
         </div>
-      </main>
+        <div className="card-content">
+          <p>₹ {product.price}</p>
+        </div>
+        <div className="card-action">
+          <Link
+            href={{
+              pathname: "/product/[id]",
+              query: { id: product._id },
+            }}
+          >
+            <a>View Product</a>
+          </Link>
+        </div>
+      </div>
+    );
+  });
+  return <div className="rootcard">{productList}</div>;
+}
 
-      <footer className={styles.footer}>
-        <a
-          href="https://vercel.com?utm_source=create-next-app&utm_medium=default-template&utm_campaign=create-next-app"
-          target="_blank"
-          rel="noopener noreferrer"
-        >
-          Powered by{' '}
-          <img src="/vercel.svg" alt="Vercel Logo" className={styles.logo} />
-        </a>
-      </footer>
-    </div>
-  )
+// export async function getStaticProps(context) {
+//   initDB();
+//   const res = await Product.find();
+//   const data = JSON.parse(JSON.stringify(res));
+//   return { props: { products: data } };
+// }
+
+export async function getServerSideProps(context) {
+  const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
+  const data = await res.json();
+  return { props: { products: data } };
 }
