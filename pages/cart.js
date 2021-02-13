@@ -9,7 +9,7 @@ import Cart from "../models/Cart";
 import User from "../models/User";
 
 function cart({ error, products }) {
-  console.log({ products });
+  console.log({ error });
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
