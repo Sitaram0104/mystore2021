@@ -8,8 +8,8 @@ import initDB from "../helpers/initDB";
 import Cart from "../models/Cart";
 import User from "../models/User";
 
-function cart({ error, products }) {
-  console.log(error, products);
+function cart({ error, products, er }) {
+  console.log(error, er, products);
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
@@ -167,11 +167,11 @@ export async function getServerSideProps(context) {
     const products = JSON.parse(JSON.stringify(pa));
     er = { user2, cart, pa, products };
     if (products.error) {
-      return { props: { error: products.error } };
+      return { props: { er: products.error } };
     }
-    return { props: { products: pa, error: er } };
+    return { props: { products: pa, er } };
   } catch (error) {
-    return { props: { error: er } };
+    return { props: { er } };
   }
 }
 
