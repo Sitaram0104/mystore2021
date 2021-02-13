@@ -5,6 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
 import initDB from "../helpers/initDB";
+import Cart from "../models/Cart";
 
 function cart({ error, products }) {
   const router = useRouter();
