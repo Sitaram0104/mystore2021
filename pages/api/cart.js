@@ -18,11 +18,15 @@ export default async (req, res) => {
 };
 
 const fetchUserCart = Authenticated(async (req, res) => {
-  const cart = await Cart.findOne({ user: req.userId }).populate(
-    "products.product"
-  );
-  const products = cart.products;
-  res.status(200).json(products);
+  try {
+    const cart = await Cart.findOne({ user: req.userId }).populate(
+      "products.product"
+    );
+    const products = cart.products;
+    res.status(200).json(products);
+  } catch (error) {
+    res.status(500).json({ error });
+  }
 });
 
 const addProduct = Authenticated(async (req, res) => {
