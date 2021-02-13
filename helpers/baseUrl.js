@@ -1,5 +1,5 @@
 const baseUrl =
-  process.env.Node_ENV === "production"
+  process.env.NODE_ENV === "production"
     ? "https://mystore202167.vercel.app/"
     : "http://localhost:3000";
 
