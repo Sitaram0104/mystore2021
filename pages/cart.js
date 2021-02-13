@@ -8,7 +8,6 @@ import StripeCheckout from "react-stripe-checkout";
 function cart({ error, products }) {
   const router = useRouter();
   const { token } = parseCookies();
-  console.log("products= ", products);
   const [cartProducts, setCartProducts] = useState(products);
   let price = 0;
 
