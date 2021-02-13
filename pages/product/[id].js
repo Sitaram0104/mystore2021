@@ -126,7 +126,7 @@ export async function getStaticProps({ params: { id } }) {
 }
 
 export async function getStaticPaths() {
-  const res = await fetch(`${baseUrl}/api/product/${id}`);
+  const res = await fetch(`${baseUrl}/api/products`);
   const data = await res.json();
   const paths = data.map((p) => ({
     params: { id: p._id.toString() },
