@@ -154,10 +154,9 @@ export async function getServerSideProps(context) {
     initDB();
     const user2 = await User.findOne({ email: user.email });
     er = { user2 };
-    const cart = await Cart.findOne({ user: user2._id });
-    // .populate(
-    //   "products.product"
-    // );
+    const cart = await Cart.findOne({ user: user2._id }).populate(
+      "products.product"
+    );
     er = { user2, cart };
     const products = JSON.parse(JSON.stringify(cart.products));
     er = { user2, products };
