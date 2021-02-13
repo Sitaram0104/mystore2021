@@ -145,7 +145,8 @@ export async function getServerSideProps(context) {
       headers: { Authorization: token },
     });
 
-    const products = await res.json();
+    // const products = await res.json();
+    const products = JSON.parse(JSON.stringify(cart.products));
     er = { res, products };
     return { props: { products, er } };
 
