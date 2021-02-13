@@ -7,6 +7,7 @@ export default function Create() {
   const [price, setPrice] = useState(0);
   const [media, setMedia] = useState("");
   const [description, setDescription] = useState("");
+  const { token } = parseCookies();
 
   const handleSubmit = async (e) => {
     e.preventDefault();
@@ -14,7 +15,7 @@ export default function Create() {
       const mediaUrl = await imageUpload();
       const res = await fetch(`${baseUrl}/api/products`, {
         method: "POST",
-        headers: { "Content-Type": "application/json" },
+        headers: { "Content-Type": "application/json", Authorization: token },
         body: JSON.stringify({ name, price, mediaUrl, description }),
       });
       const res2 = await res.json();
