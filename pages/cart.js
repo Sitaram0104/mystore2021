@@ -141,7 +141,7 @@ export async function getServerSideProps(context) {
     }
     const res = await fetch(`${baseUrl}/api/cart`, {
       method: "GET",
-      headers: { authorization: token },
+      headers: { Authorization: token },
     });
     const products = await res.json();
     return { props: { products } };
