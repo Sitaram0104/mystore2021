@@ -134,6 +134,7 @@ function cart({ error, products }) {
 }
 
 export async function getServerSideProps(context) {
+  let er;
   try {
     const { token } = parseCookies(context);
     if (!token) {
@@ -143,8 +144,10 @@ export async function getServerSideProps(context) {
       method: "GET",
       headers: { Authorization: token },
     });
+
     const products = await res.json();
-    return { props: { products } };
+    er = { res, products };
+    return { props: { products, er } };
 
     // const cookie = parseCookies(context);
     // const user = cookie.user ? JSON.parse(cookie.user) : "";
