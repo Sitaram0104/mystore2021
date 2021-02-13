@@ -169,7 +169,7 @@ export async function getServerSideProps(context) {
     if (products.error) {
       return { props: { error: products.error } };
     }
-    return { props: { products: pa } };
+    return { props: { products: pa, error: er } };
   } catch (error) {
     return { props: { error: er } };
   }
