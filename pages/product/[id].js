@@ -117,35 +117,35 @@ function Product1({ product }) {
   );
 }
 
-export async function getServerSideProps({ params: { id } }) {
-  const res = await fetch(`${baseUrl}/api/product/${id}`);
-  const data = await res.json();
+export async function getStaticProps({ params: { id } }) {
+  initDB();
+  const res = await Product.findOne({ _id: id });
+  const data = JSON.parse(JSON.stringify(res));
   return {
     props: { product: data }, // will be passed to the page component as props
   };
 }
 
-// export async function getStaticProps({ params: { id } }) {
-//   initDB();
-//   const res = await Product.findOne({ _id: id });
-//   const data = JSON.parse(JSON.stringify(res));
+export async function getStaticPaths() {
+  initDB();
+  const res = await Product.find();
+  const data = JSON.parse(JSON.stringify(res));
+  const paths = data.map((p) => ({
+    params: { id: p._id.toString() },
+  }));
+  // const paths = [{ params: { id: data[0]._id.toString() } }];
+
+  return {
+    paths,
+    fallback: false, // See the "fallback" section below
+  };
+}
+
+// export async function getServerSideProps({ params: { id } }) {
+//   const res = await fetch(`${baseUrl}/api/product/${id}`);
+//   const data = await res.json();
 //   return {
 //     props: { product: data }, // will be passed to the page component as props
-//   };
-// }
-
-// export async function getStaticPaths() {
-//   initDB();
-//   const res = await Product.find();
-//   const data = JSON.parse(JSON.stringify(res));
-//   const paths = data.map((p) => ({
-//     params: { id: p._id.toString() },
-//   }));
-//   // const paths = [{ params: { id: data[0]._id.toString() } }];
-
-//   return {
-//     paths,
-//     fallback: false, // See the "fallback" section below
 //   };
 // }
 

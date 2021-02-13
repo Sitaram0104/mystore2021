@@ -33,17 +33,17 @@ export default function Home({ products }) {
   return <div className="rootcard">{productList}</div>;
 }
 
-// export async function getStaticProps() {
-// const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
-// const data = await res.json();
-// return { props: { products: data } };
-// }
-
-export async function getServerSideProps() {
+export async function getStaticProps() {
   const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
   const data = await res.json();
   return { props: { products: data } };
 }
+
+// export async function getServerSideProps() {
+//   const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
+//   const data = await res.json();
+//   return { props: { products: data } };
+// }
 
 // initDB();
 // const res = await Product.find();
