@@ -1,6 +1,4 @@
 import React, { useEffect, useRef, useState } from "react";
-import initDB from "../../helpers/initDB";
-import Product from "../../models/Product";
 import { useRouter } from "next/router";
 import baseUrl from "../../helpers/baseUrl";
 import { destroyCookie, parseCookies } from "nookies";
@@ -147,7 +145,7 @@ export async function getServerSideProps({ params: { id } }) {
 
 //   return {
 //     paths,
-//     fallback: true, // See the "fallback" section below
+//     fallback: false, // See the "fallback" section below
 //   };
 // }
 

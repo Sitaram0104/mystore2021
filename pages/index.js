@@ -44,4 +44,8 @@ export async function getServerSideProps(context) {
   const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
   const data = await res.json();
   return { props: { products: data } };
+  // initDB();
+  // const res = await Product.find();
+  // const data = JSON.parse(JSON.stringify(res));
+  // return { props: { products: data } };
 }
