@@ -56,7 +56,7 @@ export default async (req, res) => {
 
     res.status(200).json({ message: "payment was successful" });
   } catch (error) {
-    console.log({ error });
+    console.log(error);
     return res.status(401).json({ error: "error processing payment" });
   }
 };

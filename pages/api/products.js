@@ -21,7 +21,7 @@ const getAllProducts = async (req, res) => {
     const p = await Product.find();
     res.status(200).json(p);
   } catch (error) {
-    console.log({ error });
+    console.log(error);
     res.status(500).send({ error });
   }
 };
@@ -30,7 +30,6 @@ const saveProduct = Authenticated(async (req, res) => {
   const { name, price, description, mediaUrl } = req.body;
   try {
     if (!name || !price || !description || !mediaUrl) {
-      console.log({ name, price, description, mediaUrl });
       return res.status(422).json({ error: "Please add all the fields" });
     }
     const product = await new Product({
@@ -41,7 +40,7 @@ const saveProduct = Authenticated(async (req, res) => {
     }).save();
     res.status(201).json(product);
   } catch (error) {
-    console.log({ error });
+    console.log(error);
     res.status(500).json({ error });
   }
 });

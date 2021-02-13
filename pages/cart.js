@@ -4,6 +4,7 @@ import baseUrl from "../helpers/baseUrl";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
+import initDB from "../helpers/initDB";
 
 function cart({ error, products }) {
   const router = useRouter();
@@ -135,11 +136,17 @@ export async function getServerSideProps(context) {
   if (!token) {
     return { props: { products: [] } };
   }
-  const res = await fetch(`${baseUrl}/api/cart`, {
-    method: "GET",
-    headers: { authorization: token },
-  });
-  const products = await res.json();
+  // const res = await fetch(`${baseUrl}/api/cart`, {
+  //   method: "GET",
+  //   headers: { authorization: token },
+  // });
+  // const products = await res.json();
+
+  initDB();
+  const cart = await Cart.findOne({ user: req.userId }).populate(
+    "products.product"
+  );
+  const products = JSON.parse(JSON.stringify(cart.products));
 
   if (products.error) {
     return { props: { error: products.error } };

@@ -2,6 +2,8 @@ import React, { useEffect, useRef, useState } from "react";
 import { useRouter } from "next/router";
 import baseUrl from "../../helpers/baseUrl";
 import { destroyCookie, parseCookies } from "nookies";
+import initDB from "../../helpers/initDB";
+import Product from "../../models/Product";
 
 function Product1({ product }) {
   const [quantity, setQuantity] = useState(1);
@@ -118,16 +120,24 @@ function Product1({ product }) {
 }
 
 export async function getStaticProps({ params: { id } }) {
-  const res = await fetch(`${baseUrl}/api/product/${id}`);
-  const data = await res.json();
+  initDB();
+  const res = await Product.find({ _id: id });
+  const data = JSON.parse(JSON.stringify(res));
+
+  // const res = await fetch(`${baseUrl}/api/product/${id}`);
+  // const data = await res.json();
   return {
     props: { product: data }, // will be passed to the page component as props
   };
 }
 
 export async function getStaticPaths() {
-  const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
-  const data = await res.json();
+  initDB();
+  const res = await Product.find();
+  const data = JSON.parse(JSON.stringify(res));
+
+  // const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
+  // const data = await res.json();
   const paths = data.map((p) => ({
     params: { id: p._id.toString() },
   }));

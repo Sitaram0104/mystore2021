@@ -31,7 +31,7 @@ const createUser = async (req, res) => {
     await new Cart({ user: newUser._id }).save();
     res.status(201).json({ message: "signup success" });
   } catch (error) {
-    console.log({ error });
+    console.log(error);
     res.status(500).json({ error });
   }
 };

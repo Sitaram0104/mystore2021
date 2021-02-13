@@ -24,7 +24,7 @@ export default function Login() {
       M.toast({ html: res2.message, classes: "green" });
       cookie.set("token", res2.token);
       cookie.set("user", res2.user);
-      router.push("/account");
+      router.push("/");
     }
   };
 

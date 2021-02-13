@@ -1,6 +1,8 @@
 import Link from "next/link";
 import { useRouter } from "next/router";
 import baseUrl from "../helpers/baseUrl";
+import initDB from "../helpers/initDB";
+import Product from "../models/Product";
 
 export default function Home({ products }) {
   const router = useRouter();
@@ -34,9 +36,13 @@ export default function Home({ products }) {
 }
 
 export async function getStaticProps() {
-  const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
-  const data = await res.json();
+  initDB();
+  const res = await Product.find();
+  const data = JSON.parse(JSON.stringify(res));
   return { props: { products: data } };
+  // const res = await fetch(`${baseUrl}/api/products`, { method: "GET" });
+  // const data = await res.json();
+  // return { props: { products: data } };
 }
 
 // export async function getServerSideProps() {

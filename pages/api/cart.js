@@ -21,7 +21,6 @@ const fetchUserCart = Authenticated(async (req, res) => {
   const cart = await Cart.findOne({ user: req.userId }).populate(
     "products.product"
   );
-  console.log(cart.products);
   res.status(200).json(cart.products);
 });
 

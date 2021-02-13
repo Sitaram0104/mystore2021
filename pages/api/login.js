@@ -35,7 +35,7 @@ const loginUser = async (req, res) => {
       return res.status(401).json({ error: "email or password don't match" });
     }
   } catch (error) {
-    console.log({ error });
+    console.log(error);
     res.status(500).json({ error });
   }
 };
