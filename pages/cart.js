@@ -9,7 +9,7 @@ import Cart from "../models/Cart";
 import User from "../models/User";
 
 function cart({ error, products }) {
-  console.log({ error });
+  console.log(error, products);
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
@@ -137,6 +137,7 @@ function cart({ error, products }) {
 }
 
 export async function getServerSideProps(context) {
+  let er;
   try {
     const { token } = parseCookies(context);
     if (!token) {
@@ -152,16 +153,19 @@ export async function getServerSideProps(context) {
     const user = cookie.user ? JSON.parse(cookie.user) : "";
     initDB();
     const user2 = await User.findOne({ email: user.email });
+    er = { user2 };
     const cart = await Cart.findOne({ user: user2._id }).populate(
       "products.product"
     );
+    er = { user2, cart };
     const products = JSON.parse(JSON.stringify(cart.products));
+    er = { user2, products };
     if (products.error) {
       return { props: { error: products.error } };
     }
     return { props: { products } };
   } catch (error) {
-    return { props: { error } };
+    return { props: { error: er } };
   }
 }
 
