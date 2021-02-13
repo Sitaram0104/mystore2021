@@ -146,7 +146,7 @@ export async function getServerSideProps(context) {
     });
 
     // const products = await res.json();
-    const products = JSON.parse(JSON.stringify(cart.products));
+    const products = JSON.parse(JSON.stringify(res));
     er = { res, products };
     return { props: { products, er } };
 
