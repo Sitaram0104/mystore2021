@@ -5,8 +5,7 @@ import { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
 
-function cart({ error, products, er }) {
-  console.log({ error, products, er });
+function cart({ error, products }) {
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
@@ -144,9 +143,8 @@ export async function getServerSideProps(context) {
       method: "GET",
       headers: { Authorization: token },
     });
-    er = { res };
     const products = await res.json();
-    return { props: { products, er } };
+    return { props: { products } };
 
     // const cookie = parseCookies(context);
     // const user = cookie.user ? JSON.parse(cookie.user) : "";
@@ -170,7 +168,7 @@ export async function getServerSideProps(context) {
     // }
     // return { props: { products } };
   } catch (error) {
-    return { props: { error, er } };
+    return { props: { error } };
   }
 }
 
