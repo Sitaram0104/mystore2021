@@ -6,7 +6,6 @@ import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
 
 function cart({ error, products }) {
-  console.log(error, products);
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
@@ -134,7 +133,6 @@ function cart({ error, products }) {
 }
 
 export async function getServerSideProps(context) {
-  let er;
   try {
     const { token } = parseCookies(context);
     if (!token) {
@@ -145,10 +143,8 @@ export async function getServerSideProps(context) {
       headers: { Authorization: token },
     });
 
-    // const products = await res.json();
-    const products = JSON.parse(JSON.stringify(res));
-    er = { res, products };
-    return { props: { products, er } };
+    const products = await res.json();
+    return { props: { products } };
 
     // const cookie = parseCookies(context);
     // const user = cookie.user ? JSON.parse(cookie.user) : "";
