@@ -121,7 +121,7 @@ function Product1({ product }) {
 
 export async function getStaticProps({ params: { id } }) {
   initDB();
-  const res = await Product.find({ _id: id });
+  const res = await Product.findById({ _id: id });
   const data = JSON.parse(JSON.stringify(res));
 
   // const res = await fetch(`${baseUrl}/api/product/${id}`);

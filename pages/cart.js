@@ -6,12 +6,12 @@ import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
 import initDB from "../helpers/initDB";
 import Cart from "../models/Cart";
+import User from "../models/User";
 
 function cart({ error, products }) {
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
-  let price = 0;
 
   if (!token) {
     return (
@@ -46,7 +46,6 @@ function cart({ error, products }) {
     return (
       <>
         {cartProducts.map((item, index) => {
-          price = price + item.quantity * item.product.price;
           return (
             <div key={index} style={{ display: "flex", margin: "20px" }}>
               <img
@@ -89,6 +88,10 @@ function cart({ error, products }) {
   };
 
   const TotalPrice = () => {
+    const price = cartProducts.reduce((acc, crr) => {
+      return acc + crr.quantity * crr.product.price;
+    }, 0);
+
     return (
       <div
         className="container"
@@ -143,12 +146,14 @@ export async function getServerSideProps(context) {
   // });
   // const products = await res.json();
 
+  const cookie = parseCookies(context);
+  const user = cookie.user ? JSON.parse(cookie.user) : "";
   initDB();
-  const cart = await Cart.findOne({ user: req.userId }).populate(
+  const user2 = await User.findOne({ email: user.email });
+  const cart = await Cart.findOne({ user: user2._id }).populate(
     "products.product"
   );
   const products = JSON.parse(JSON.stringify(cart.products));
-
   if (products.error) {
     return { props: { error: products.error } };
   }
