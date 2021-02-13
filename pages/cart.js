@@ -4,12 +4,9 @@ import baseUrl from "../helpers/baseUrl";
 import { useRouter } from "next/router";
 import Link from "next/link";
 import StripeCheckout from "react-stripe-checkout";
-import initDB from "../helpers/initDB";
-import Cart from "../models/Cart";
-import User from "../models/User";
 
-function cart({ error, products, er }) {
-  console.log(error, er, products);
+function cart({ error, products }) {
+  console.log(error, products);
   const router = useRouter();
   const { token } = parseCookies();
   const [cartProducts, setCartProducts] = useState(products);
@@ -28,9 +25,9 @@ function cart({ error, products, er }) {
   }
   if (error) {
     M.toast({ html: error, classes: "red" });
-    destroyCookie(null, "user");
-    destroyCookie(null, "token");
-    router.push("/login");
+    // destroyCookie(null, "user");
+    // destroyCookie(null, "token");
+    // router.push("/login");
   }
 
   const handleRemove = async (pid) => {
@@ -137,41 +134,41 @@ function cart({ error, products, er }) {
 }
 
 export async function getServerSideProps(context) {
-  let er;
   try {
     const { token } = parseCookies(context);
     if (!token) {
       return { props: { products: [] } };
     }
-    // const res = await fetch(`${baseUrl}/api/cart`, {
-    //   method: "GET",
-    //   headers: { authorization: token },
-    // });
-    // const products = await res.json();
+    const res = await fetch(`${baseUrl}/api/cart`, {
+      method: "GET",
+      headers: { authorization: token },
+    });
+    const products = await res.json();
+    return { props: { products } };
 
-    const cookie = parseCookies(context);
-    const user = cookie.user ? JSON.parse(cookie.user) : "";
-    initDB();
-    const user2 = await User.findOne({ email: user.email });
-    er = { user2 };
-    const cart = await Cart.findOne({ user: user2._id });
-    // .populate(
-    //   "products.product"
+    // const cookie = parseCookies(context);
+    // const user = cookie.user ? JSON.parse(cookie.user) : "";
+    // initDB();
+    // const user2 = await User.findOne({ email: user.email });
+    // er = { user2 };
+    // const cart = await Cart.findOne({ user: user2._id });
+    // // .populate(
+    // //   "products.product"
+    // // );
+    // er = { user2, cart };
+    // const pa = cart.products.map(
+    //   async (item) => await item.populate("product")
     // );
-    er = { user2, cart };
-    const pa = cart.products.map(
-      async (item) => await item.populate("product")
-    );
-    er = { user2, cart, pa };
-    // const products = JSON.parse(JSON.stringify(cart.products));
-    const products = JSON.parse(JSON.stringify(pa));
-    er = { user2, cart, pa, products };
-    if (products.error) {
-      return { props: { er: products.error } };
-    }
-    return { props: { products: pa, er } };
+    // er = { user2, cart, pa };
+    // // const products = JSON.parse(JSON.stringify(cart.products));
+    // const products = JSON.parse(JSON.stringify(pa));
+    // er = { user2, cart, pa, products };
+    // if (products.error) {
+    //   return { props: { er: products.error } };
+    // }
+    // return { props: { products } };
   } catch (error) {
-    return { props: { er } };
+    return { props: { error } };
   }
 }
 
