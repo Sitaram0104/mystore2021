@@ -118,18 +118,16 @@ function Product1({ product }) {
 }
 
 export async function getStaticProps({ params: { id } }) {
-  initDB();
-  const res = await Product.findOne({ _id: id });
-  const data = JSON.parse(JSON.stringify(res));
+  const res = await fetch(`${baseUrl}/api/product/${id}`);
+  const data = await res.json();
   return {
     props: { product: data }, // will be passed to the page component as props
   };
 }
 
 export async function getStaticPaths() {
-  initDB();
-  const res = await Product.find();
-  const data = JSON.parse(JSON.stringify(res));
+  const res = await fetch(`${baseUrl}/api/product/${id}`);
+  const data = await res.json();
   const paths = data.map((p) => ({
     params: { id: p._id.toString() },
   }));
@@ -137,7 +135,7 @@ export async function getStaticPaths() {
 
   return {
     paths,
-    fallback: false, // See the "fallback" section below
+    fallback: true, // See the "fallback" section below
   };
 }
 
