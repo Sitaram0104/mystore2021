@@ -8,4 +8,4 @@ const productsSchema = new mongoose.Schema({
 });
 
 export default mongoose.models.Product ||
-  mongoose.model("Product", productsSchema);
+  mongoose.model("Product", productsSchema, "Product");
