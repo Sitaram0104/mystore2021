@@ -137,28 +137,32 @@ function cart({ error, products }) {
 }
 
 export async function getServerSideProps(context) {
-  const { token } = parseCookies(context);
-  if (!token) {
-    return { props: { products: [] } };
-  }
-  // const res = await fetch(`${baseUrl}/api/cart`, {
-  //   method: "GET",
-  //   headers: { authorization: token },
-  // });
-  // const products = await res.json();
+  try {
+    const { token } = parseCookies(context);
+    if (!token) {
+      return { props: { products: [] } };
+    }
+    // const res = await fetch(`${baseUrl}/api/cart`, {
+    //   method: "GET",
+    //   headers: { authorization: token },
+    // });
+    // const products = await res.json();
 
-  const cookie = parseCookies(context);
-  const user = cookie.user ? JSON.parse(cookie.user) : "";
-  initDB();
-  const user2 = await User.findOne({ email: user.email });
-  const cart = await Cart.findOne({ user: user2._id }).populate(
-    "products.product"
-  );
-  const products = JSON.parse(JSON.stringify(cart.products));
-  if (products.error) {
-    return { props: { error: products.error } };
+    const cookie = parseCookies(context);
+    const user = cookie.user ? JSON.parse(cookie.user) : "";
+    initDB();
+    const user2 = await User.findOne({ email: user.email });
+    const cart = await Cart.findOne({ user: user2._id }).populate(
+      "products.product"
+    );
+    const products = JSON.parse(JSON.stringify(cart.products));
+    if (products.error) {
+      return { props: { error: products.error } };
+    }
+    return { props: { products } };
+  } catch (error) {
+    return { props: { error } };
   }
-  return { props: { products } };
 }
 
 export default cart;
